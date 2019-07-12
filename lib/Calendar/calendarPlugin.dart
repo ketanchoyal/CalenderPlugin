@@ -53,10 +53,6 @@ class CalendarPlugin extends StatefulWidget {
     endDate = DateUtils.toMidnight(endDate);
     startDayOffset = startDate.weekday - DateTime.monday;
 
-    // if (dayTileBuilder == null) {
-    // dayTileBuilder = DefaultDayTileBuilder();
-    // }
-
     if (weekdayLabelsRow == null) {
       weekdayLabelsRow = weekDay;
     }
@@ -80,12 +76,6 @@ class CalendarPlugin extends StatefulWidget {
     return state;
   }
 
-  // @override
-  // CalendarPluginState createState() {
-  //   state = CalendarPluginState(selectedDate: selectedDate);
-  //   return state;
-  // }
-
   void setSelectedDate(DateTime date) {
     state.setSelectedDate(date);
   }
@@ -101,21 +91,16 @@ class CalendarPlugin extends StatefulWidget {
   int getPositionOfDate(DateTime date) {
     int daysDifference =
         date.difference(DateUtils.toMidnight(startDate)).inDays;
-    int weekendsDifference = ((daysDifference + startDate.weekday) / 7).toInt();
+    int weekendsDifference =
+        ((daysDifference + startDate.weekday) ~/ 7).toInt();
     var position = daysDifference - weekendsDifference * 2;
     return position;
   }
 
   int getPageForDate(DateTime date) {
-    // if (displayMode == DisplayMode.WEEKS) {
     int daysDifferenceFromStartDate = date.difference(startDate).inDays;
     int page = (daysDifferenceFromStartDate + startDayOffset) ~/ 7;
     return page;
-    // } else {
-    //   var monthDifference = (date.year * 12 + date.month) -
-    //       (startDate.year * 12 + startDate.month);
-    //   return monthDifference;
-    // }
   }
 }
 
@@ -138,41 +123,27 @@ class CalendarPluginState extends State<CalendarPlugin> {
   }
 
   void setSelectedDate(DateTime date) {
-    setState(() {
-      if (selectedDates.isNotEmpty) {
-        bool dateSelected = false;
+    setState(
+      () {
+        if (selectedDates.isNotEmpty) {
+          bool dateSelected = false;
 
-        for (var i = selectedDates.length - 1; i >= 0; i--) {
-          if (DateUtils.isSameDay(selectedDates[i], date)) {
-            selectedDates.removeAt(i);
-            dateSelected = true;
+          for (var i = selectedDates.length - 1; i >= 0; i--) {
+            if (DateUtils.isSameDay(selectedDates[i], date)) {
+              selectedDates.removeAt(i);
+              dateSelected = true;
+            }
+          }
+
+          if (!dateSelected) {
+            selectedDates.add(date);
           }
         }
-
-        if (!dateSelected) {
-          selectedDates.add(date);
+        if (selectedDate != null) {
+          selectedDate = date;
         }
-      }
-      if (selectedDate != null) {
-        selectedDate = date;
-      }
-      // if (widget.selectionMode == SelectionMode.SINGLE) {
-      //   selectedDate = date;
-      // } else {
-      //   bool dateSelected = false;
-
-      //   for (var i = selectedDates.length - 1; i >= 0; i--) {
-      //     if (DateUtils.isSameDay(selectedDates[i], date)) {
-      //       selectedDates.removeAt(i);
-      //       dateSelected = true;
-      //     }
-      //   }
-
-      //   if (!dateSelected) {
-      //     selectedDates.add(date);
-      //   }
-      // }
-    });
+      },
+    );
   }
 
   void setCurrentDate(DateTime date) {
@@ -184,12 +155,8 @@ class CalendarPluginState extends State<CalendarPlugin> {
 
   @override
   Widget build(BuildContext context) {
-    // if (widget.displayMode == DisplayMode.WEEKS) {
     int lastPage = widget.getPageForDate(widget.endDate);
     pagesCount = lastPage + 1;
-    // } else {
-    //   pagesCount = widget.endDate.month - widget.startDate.month + 1;
-    // }
 
     pageView = PageView.builder(
       itemBuilder: (context, position) => buildCalendarPage(position),
@@ -200,20 +167,13 @@ class CalendarPluginState extends State<CalendarPlugin> {
     );
 
     return Container(
-        // height: widget.displayMode == DisplayMode.WEEKS ? 60.0 : 260.0,
-        // padding: EdgeInsets.all(5),
         height: 70.0,
         // color: Colors.red,
         child: pageView);
   }
 
   Widget buildCalendarPage(int position) {
-    // if (widget.displayMode == DisplayMode.WEEKS) {
     return buildCalendarPageInWeeksMode(position);
-    // } else {
-    //   return buildCalendarPageInMonthsMode(position);
-    // }
-    //DisplayMode == WEEKS
   }
 
   Widget buildCalendarPageInWeeksMode(int position) {
@@ -241,40 +201,8 @@ class CalendarPluginState extends State<CalendarPlugin> {
         weekdayLabelsRow: widget.weekdayLabelsRow);
   }
 
-  // Widget buildCalendarPageInMonthsMode(int position) {
-  //   DateTime pageStartDate;
-  //   DateTime pageEndDate;
-
-  //   if (position == 0) {
-  //     pageStartDate = widget.startDate;
-  //     DateTime nextMonthFirstDate =
-  //         DateTime(widget.startDate.year, widget.startDate.month + 1, 1);
-  //     pageEndDate = DateUtils.addDaysToDate(nextMonthFirstDate, -1);
-  //   } else if (position == pagesCount - 1) {
-  //     pageEndDate = widget.endDate;
-  //     pageStartDate = DateTime(widget.endDate.year, widget.endDate.month, 1);
-  //   } else {
-  //     pageStartDate =
-  //         DateTime(widget.startDate.year, widget.startDate.month + position, 1);
-  //     DateTime nextMonthFirstDate = DateTime(
-  //         widget.startDate.year, widget.startDate.month + position + 1, 1);
-  //     pageEndDate = DateUtils.addDaysToDate(nextMonthFirstDate, -1);
-  //     ;
-  //   }
-
-  //   return CalendarPluginPage(
-  //     pageStartDate: pageStartDate,
-  //     pageEndDate: pageEndDate,
-  //     weekdayLabelsRow: widget.weekdayLabelsRow,
-  //   );
-  // }
-
   bool isDateSelected(DateTime date) {
-    // if (widget.selectionMode == SelectionMode.MULTI) {
-    //   return selectedDates.contains(date);
-    // } else {
     return DateUtils.isSameDay(selectedDate, date);
-    // }
   }
 
   void toggleDateSelection(DateTime date) {
