@@ -2,8 +2,8 @@ import 'package:calender_flutter/Calendar/calendarPlugin.dart';
 import 'package:calender_flutter/Calendar/date_utils.dart';
 import 'package:flutter/material.dart';
 
-class CalendarroDayItem extends StatelessWidget {
-  CalendarroDayItem({
+class CalendarPluginDayItem extends StatelessWidget {
+  CalendarPluginDayItem({
     this.date,
     this.calendarroState,
     this.onTap,
@@ -24,26 +24,32 @@ class CalendarroDayItem extends StatelessWidget {
 
     BoxDecoration boxDecoration;
     if (daySelected) {
-      boxDecoration = BoxDecoration(color: Colors.blue, shape: BoxShape.circle);
+      textColor = Colors.white;
+      boxDecoration =
+          BoxDecoration(color: Colors.blue, shape: BoxShape.rectangle);
     } else if (isToday) {
       boxDecoration = BoxDecoration(
-          border: Border.all(
-            color: Colors.white,
-            width: 1.0,
-          ),
-          shape: BoxShape.circle);
+        border: Border.all(
+          color: Colors.white,
+          width: 1.0,
+        ),
+        // shape: BoxShape.circle,
+      );
     }
 
     return Expanded(
       child: GestureDetector(
         child: Container(
-          height: 40.0,
+          height: 45,
           decoration: boxDecoration,
           child: Center(
             child: Text(
               "${date.day}",
               textAlign: TextAlign.center,
-              style: TextStyle(color: textColor),
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: textColor,
+              ),
             ),
           ),
         ),

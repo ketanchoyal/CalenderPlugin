@@ -10,53 +10,54 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'Calendar Demo',
       theme: new ThemeData(
-        // primarySwatch: Colors.orange,
-      ),
+          // primarySwatch: Colors.orange,
+          ),
       home: new MyHomePage(title: 'Calendar Demo'),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   final String title;
-  CalendarPlugin monthCalendarro;
 
   MyHomePage({Key key, this.title}) : super(key: key);
 
   @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  CalendarPlugin monthCalendarro;
+
+  @override
   Widget build(BuildContext context) {
-    // var lastDayOfNextMonth = DateUtils.getLastDayOfNextMonth();
-    // monthCalendarro = CalendarPlugin(
-    //         startDate: DateUtils.getFirstDayOfNextMonth(),
-    //         endDate: lastDayOfNextMonth,
-    //         displayMode: DisplayMode.MONTHS,
-    //         selectionMode: SelectionMode.MULTI,
-    //         weekdayLabelsRow: CustomWeekdayLabelsRow(),
-    //         onTap: (date) {
-    //           monthCalendarro.selectedDates;
-    //           print("onTap: $date");
-    //         },
-    //       );
     return new Scaffold(
       appBar: new AppBar(
         elevation: 0,
-        title: new Text(title),
+        title: new Text(widget.title),
       ),
       body: Column(
         children: <Widget>[
-          SizedBox(
-            height: 10,
-          ),
+          // SizedBox(
+          //   height: 10,
+          // ),
           Container(
             // color: Colors.orange,
             child: CalendarPlugin(
               endDate: DateTime.now().add(Duration(days: 45)),
+              // weekdayLabelsRow: CustomWeekdayLabelsRow(),
+              // selectedDates: [
+              //   DateTime.now(),
+              //   DateTime.now().add(Duration(days: 1)),
+              //   DateTime.now().add(Duration(days: 2))
+              // ],
+              // selectedDate: DateTime.now().subtract(Duration(days: 1)),
             ),
           ),
           Expanded(
             child: Container(
-              // color: Colors.red,
-            ),
+                // color: Colors.red,
+                ),
           ),
           // monthCalendarro
         ],
